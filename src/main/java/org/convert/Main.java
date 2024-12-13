@@ -13,9 +13,10 @@ public class Main {
         String outputFilePath = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/";
 
         //test lectura de multiples archivos
-        String PENDIENTES_DIR = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/banco_azul_pendientes";
-        String PROCESADOS_DIR = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/banco_azul_procesado";
-
+        String PENDIENTES_DIR = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/banco_azul_pendientes/";
+        String PROCESADOS_DIR = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/banco_azul_procesado/";
+        String CSV_DIR = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/banco_azul_csv/";
+        String ERRORES_DIR = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/banco_azul_error/";
         // Verificar si se recibió un argumento en la línea de comandos
         String filePathParameter;
         String outputPathParameter;
@@ -29,7 +30,7 @@ public class Main {
         } else {
             // Usar la ruta por defecto si no se pasa un parámetro
             filePathParameter = intputFilePath;
-            outputPathParameter = outputFilePath;
+            outputPathParameter = CSV_DIR;
 
             System.out.println("No se proporcionó un argumento, usando ruta quemada: " + filePathParameter);
             System.out.println("El archivo se guardara en ----> "+  outputPathParameter);
@@ -43,7 +44,7 @@ public class Main {
         }*/
 
         ProcessFolder processFolder = new ProcessFolder();
-        processFolder.readFolder(PENDIENTES_DIR,PROCESADOS_DIR);
+        processFolder.readFolder(PENDIENTES_DIR,PROCESADOS_DIR,ERRORES_DIR,outputPathParameter);
 
 
     }

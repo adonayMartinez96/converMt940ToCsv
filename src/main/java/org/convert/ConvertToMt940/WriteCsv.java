@@ -40,7 +40,7 @@ public class WriteCsv {
     }
 
 
-    public  void extractMt940(String filePath,String outputPath)throws IOException{
+    public  boolean extractMt940(String filePath,String outputPath)throws IOException{
         //file output
         String nameFile = outputPath + generateName();
 
@@ -51,7 +51,7 @@ public class WriteCsv {
         List<String> lines = Files.readAllLines(Paths.get(filePath));
         if (lines.isEmpty()) {
             System.err.println("Error: El archivo está vacío o no contiene datos válidos.");
-            return;
+            return false;
         }
 
         //Variables constantes
@@ -155,8 +155,10 @@ public class WriteCsv {
                     ));
                 }
             }
+            return true;
         }catch (IOException e){
             System.err.println(e.getMessage());
+            return false;
         }
     }
 
