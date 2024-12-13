@@ -7,8 +7,8 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) {
         // Ruta "quemada" para pruebas rápidas
-        String intputFilePath = "C:/Users/User/Desktop/CURSOS/proyectos spring/spring_security/Banco azul/MT940.txt";
-        String outputFilePath = "C:/Users/User/Desktop/CURSOS/proyectos spring/spring_security/Banco azul/";
+        String intputFilePath = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/MT940.txt";
+        String outputFilePath = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/";
 
         // Verificar si se recibió un argumento en la línea de comandos
         String filePathParameter;

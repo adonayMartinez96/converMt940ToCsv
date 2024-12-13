@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="convertMt940ToCsv:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/convertMt940ToCsv_jar</output-path>
+    <root id="archive" name="convertMt940ToCsv.jar">
+      <element id="module-output" name="convertMt940ToCsv" />
+    </root>
+  </artifact>
+</component>

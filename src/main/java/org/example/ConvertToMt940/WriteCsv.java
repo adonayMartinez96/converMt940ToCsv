@@ -49,12 +49,20 @@ public class WriteCsv {
 
         //almacen de lineas mt940
         List<String> lines = Files.readAllLines(Paths.get(filePath));
+        if (lines.isEmpty()) {
+            System.err.println("Error: El archivo está vacío o no contiene datos válidos.");
+            return;
+        }
 
         //Variables constantes
         String cuenta = "", saldoInicial = "", detalleTransaccion = "", informacionTransaccion = "";
 
             //extraer cabeceras
             for(String line: lines){
+                if (line.trim().isEmpty()) {
+                    continue;
+                }
+
                 System.out.println("extraccion de las lineas: "+ line);
 
                 if(line.startsWith(":25:")){
@@ -86,23 +94,49 @@ public class WriteCsv {
             for(int i = 0; i<lines.size(); i++){
                 String line = lines.get(i);
 
+                String fecha = "";
+                String marcaDebitoCredito = "";
+                String monto = "0.0"; // Valor predeterminado
+                String codigoTransaccion = "";
+                String referenciaBancaria = "";
+
                 if(line.startsWith(":61:")){
+                    if(validarLongitud(line, 20)) {
+                        //validar la existencia del caracter N dentro de la cadena
+                        int indexN = line.indexOf('N');
+                        if(indexN == -1){
+                            System.err.println("Error: No se encontró el indicador 'N' en la línea :61:. Saltando la extracción de monto.");
+                            monto = "0.00";
+                        }else{
+                            monto = line.substring(15,indexN).replace(",",".");
+                            System.out.println("monto -----> "+monto);
+                        }
 
-                    //extraccion de los datos de la linea :61:
-                    String fecha = line.substring(4,10); //AAMMDD fecha
-                    System.out.println("fecha: "+ fecha);
+                        //extraccion de los datos de la linea :61:
+                        fecha = line.substring(4, 10); //AAMMDD fecha
+                        System.out.println("fecha---> " + fecha);
 
-                    String marcaDebitoCredito = line.substring(14,15);
-                    System.out.println("marca debito credito -----> "+ marcaDebitoCredito);
+                        marcaDebitoCredito = line.substring(14, 15);
+                        System.out.println("marca debito credito -----> " + marcaDebitoCredito);
 
-                    String monto = line.substring(15, line.indexOf('N')).replace(",",".");
-                    System.out.println("monto -----> "+ monto);
+                        if (indexN != -1 && line.length() >= indexN + 4) {
+                            // Si 'N' existe y hay suficientes caracteres para extraer el código
+                            codigoTransaccion = line.substring(indexN + 1, indexN + 4);
+                            System.out.println("codigoTransaccion----->"+codigoTransaccion);
+                        } else {
+                            System.err.println("Error: No se puede extraer el código de transacción. Índice 'N' no encontrado o línea demasiado corta.");
+                            codigoTransaccion = "N/A";
+                        }
 
-                    String codigoTransaccion = line.substring(line.indexOf('N')+1,line.indexOf('N')+4);
-                    String referenciaBancaria = line.substring(line.indexOf("//")+2).trim();
+                        //codigoTransaccion = line.substring(line.indexOf('N') + 1, line.indexOf('N') + 4);
 
-                    detalleTransaccion = line.substring(4).replace(",",".");
+                        //Validar existencia de "//"
+                        int indexRef = line.indexOf("//");
+                        referenciaBancaria = (indexRef == -1) ? "N/A" : line.substring(indexRef + 2).trim();
+                        //referenciaBancaria = line.substring(line.indexOf("//") + 2).trim();
 
+                        detalleTransaccion = line.substring(4).replace(",", ".");
+                    }
 
                     //extraccion de informacion complementaria
                     if(i+1 <lines.size() && lines.get(i+1).startsWith(":86:")){
@@ -136,13 +170,8 @@ public class WriteCsv {
     }
 
     private static String generateName(){
-        // Obtener la fecha y hora actual
         LocalDateTime now = LocalDateTime.now();
-
-        // Definir el formato deseado para la fecha y hora
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyyHHmmss");
-
-        // Formatear la fecha con extension
         String formattedDateTime = now.format(formatter);
         return formattedDateTime + ".csv";
     }
