@@ -1,6 +1,7 @@
-package org.example;
+package org.convert;
 
-import org.example.ConvertToMt940.WriteCsv;
+import org.convert.ConvertToMt940.WriteCsv;
+import org.convert.Core.ProcessFolder;
 
 import java.io.IOException;
 
@@ -9,6 +10,9 @@ public class Main {
         // Ruta "quemada" para pruebas rápidas
         String intputFilePath = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/MT940.txt";
         String outputFilePath = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/";
+
+        //test lectura de multiples archivos
+        String multiplesArchivos = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/banco_azul_pendientes";
 
         // Verificar si se recibió un argumento en la línea de comandos
         String filePathParameter;
@@ -29,12 +33,15 @@ public class Main {
             System.out.println("El archivo se guardara en ----> "+  outputPathParameter);
         }
 
-        try {
+        /*try {
             WriteCsv write = new WriteCsv();
             write.extractMt940(filePathParameter,outputPathParameter);
         }catch (IOException e){
             System.err.println("error procesando el archivo "+e.getMessage());
-        }
+        }*/
+
+        ProcessFolder processFolder = new ProcessFolder();
+        processFolder.readFolder(multiplesArchivos);
 
     }
 

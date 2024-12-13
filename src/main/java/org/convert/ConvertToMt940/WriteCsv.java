@@ -1,4 +1,4 @@
-package org.example.ConvertToMt940;
+package org.convert.ConvertToMt940;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
