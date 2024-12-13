@@ -20,4 +20,11 @@ public class Transactions {
     public Transactions(){
 
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+                fecha, "Banco", cuenta, referenciaBancaria, descripcion, monto,
+                marcaDebitoCredito, saldoInicial, detalleTransaccion, informacionTransaccion);
+    }
 }

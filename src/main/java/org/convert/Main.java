@@ -1,6 +1,7 @@
 package org.convert;
 
 import org.convert.ConvertToMt940.WriteCsv;
+import org.convert.Core.MoveFIle;
 import org.convert.Core.ProcessFolder;
 
 import java.io.IOException;
@@ -12,7 +13,8 @@ public class Main {
         String outputFilePath = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/";
 
         //test lectura de multiples archivos
-        String multiplesArchivos = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/banco_azul_pendientes";
+        String PENDIENTES_DIR = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/banco_azul_pendientes";
+        String PROCESADOS_DIR = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/banco_azul_procesado";
 
         // Verificar si se recibió un argumento en la línea de comandos
         String filePathParameter;
@@ -41,7 +43,8 @@ public class Main {
         }*/
 
         ProcessFolder processFolder = new ProcessFolder();
-        processFolder.readFolder(multiplesArchivos);
+        processFolder.readFolder(PENDIENTES_DIR,PROCESADOS_DIR);
+
 
     }
 
