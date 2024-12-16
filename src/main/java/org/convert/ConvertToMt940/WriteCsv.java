@@ -40,7 +40,7 @@ public class WriteCsv {
     }
 
 
-    public  boolean extractMt940(String filePath,String outputPath)throws IOException{
+    public  boolean extractMt940(String filePath,String outputPath, String nameBank)throws IOException{
         //file output
         String nameFile = outputPath + generateName();
 
@@ -147,7 +147,7 @@ public class WriteCsv {
 
                     //escribir en el archivo CSV
                         Path path = Paths.get(filePath);
-                        String folderName = path.getParent().getFileName().toString();
+                        String folderName = nameBank;
                         writer.write(String.format(
                             "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
                             formatFecha(fecha), folderName, cuenta, referenciaBancaria, codigoTransaccion,

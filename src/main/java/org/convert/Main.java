@@ -8,15 +8,17 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
-        // Ruta "quemada" para pruebas rápidas
-        String intputFilePath = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/MT940.txt";
-        String outputFilePath = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/";
+        // Ruta "quemada" para pruebas
+        //String intputFilePath = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/MT940.txt";
+        //String outputFilePath = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/";
 
-        //test lectura de multiples archivos
+        //test lectura de multiples archivos, estos seran parametros
         String PENDIENTES_DIR = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/banco_azul_pendientes/";
         String PROCESADOS_DIR = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/banco_azul_procesado/";
         String CSV_DIR = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/banco_azul_csv/";
         String ERRORES_DIR = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/banco_azul_error/";
+        String NAME_BANK = "YOP";
+
         // Verificar si se recibió un argumento en la línea de comandos
         String filePathParameter;
         String outputPathParameter;
@@ -29,22 +31,15 @@ public class Main {
             System.out.println("Archivo a procesar recibido como argumento: " + outputPathParameter);
         } else {
             // Usar la ruta por defecto si no se pasa un parámetro
-            filePathParameter = intputFilePath;
+            filePathParameter = PENDIENTES_DIR;
             outputPathParameter = CSV_DIR;
 
             System.out.println("No se proporcionó un argumento, usando ruta quemada: " + filePathParameter);
             System.out.println("El archivo se guardara en ----> "+  outputPathParameter);
         }
 
-        /*try {
-            WriteCsv write = new WriteCsv();
-            write.extractMt940(filePathParameter,outputPathParameter);
-        }catch (IOException e){
-            System.err.println("error procesando el archivo "+e.getMessage());
-        }*/
-
         ProcessFolder processFolder = new ProcessFolder();
-        processFolder.readFolder(PENDIENTES_DIR,PROCESADOS_DIR,ERRORES_DIR,outputPathParameter);
+        processFolder.readFolder(PENDIENTES_DIR,PROCESADOS_DIR,ERRORES_DIR,CSV_DIR,NAME_BANK);
 
 
     }

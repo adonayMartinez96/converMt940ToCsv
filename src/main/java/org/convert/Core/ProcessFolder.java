@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ProcessFolder {
-    public  void readFolder(String pathPendientes, String pathProcesado,String pathErrores, String pathCsv){
+    public  void readFolder(String pathPendientes, String pathProcesado,String pathErrores, String pathCsv, String nameBank){
         MoveFIle moveFile = new MoveFIle();
         WriteCsv writeCsv  = new WriteCsv();
 
@@ -24,7 +24,7 @@ public class ProcessFolder {
 
                     System.out.println("el archivo sera guardado en--------->" + pathCsv);
 
-                    if (writeCsv.extractMt940(fileNameiIteracion,pathCsv)){
+                    if (writeCsv.extractMt940(fileNameiIteracion,pathCsv,nameBank)){
                         moveFile.moveFile(file, Paths.get(pathProcesado));
                     }else{
                         moveFile.moveFile(file, Paths.get(pathErrores));
