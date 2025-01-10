@@ -3,6 +3,7 @@ package org.convert;
 import org.convert.ConvertToMt940.WriteCsv;
 import org.convert.Core.MoveFIle;
 import org.convert.Core.ProcessFolder;
+import org.convert.Core.ValidateParams;
 
 import java.io.IOException;
 
@@ -19,23 +20,23 @@ public class Main {
         String ERRORES_DIR = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/banco_azul_error/";
         String NAME_BANK = "YOP";
 
+        //clase que contiene funcion para validar parametros
+        ValidateParams validateParams = new ValidateParams();
+
         // Verificar si se recibió un argumento en la línea de comandos
         String filePathParameter;
         String outputPathParameter;
 
-        if (args.length > 0) {
-            filePathParameter = args[0];
-            outputPathParameter = args[1];
+        if (args.length >= 5) {
+            PENDIENTES_DIR = validateParams.validateParam(args[0], "PENDIENTES_DIR");
+            PROCESADOS_DIR = validateParams.validateParam(args[1],"PROCESADOS_DIR");
+            CSV_DIR = validateParams.validateParam(args[2],"CSV_DIR");
+            ERRORES_DIR = validateParams.validateParam(args[3],"ERRORES_DIR");
+            NAME_BANK =validateParams.validateParam(args[4],"NAME_BANK");
 
-            System.out.println("Archivo a procesar recibido como argumento: " + filePathParameter);
-            System.out.println("Archivo a procesar recibido como argumento: " + outputPathParameter);
+
         } else {
-            // Usar la ruta por defecto si no se pasa un parámetro
-            filePathParameter = PENDIENTES_DIR;
-            outputPathParameter = CSV_DIR;
-
-            System.out.println("No se proporcionó un argumento, usando ruta quemada: " + filePathParameter);
-            System.out.println("El archivo se guardara en ----> "+  outputPathParameter);
+            System.out.println("Se deben proporcionar al menos 5 parametros");
         }
 
         ProcessFolder processFolder = new ProcessFolder();

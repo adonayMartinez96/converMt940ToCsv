@@ -63,7 +63,7 @@ public class WriteCsv {
                     continue;
                 }
 
-                System.out.println("extraccion de las lineas: "+ line);
+                //System.out.println("extraccion de las lineas: "+ line);
 
                 if(line.startsWith(":25:")){
                     if (validarLongitud(line, 5)){
@@ -76,7 +76,7 @@ public class WriteCsv {
                     if(validarLongitud(line,15  )) {
                         saldoInicial = line.substring(15).replace(",", ".");
                         ;// saldo inicial
-                        System.out.println("saldo inicial ------> " + saldoInicial);
+                        //System.out.println("saldo inicial ------> " + saldoInicial);
                     }else{
                         System.err.println("Error: Línea :60F: demasiado corta. Asignando valor predeterminado.");
                         cuenta = "N/A"; // Asignar valor predeterminado
