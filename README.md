@@ -49,18 +49,19 @@ bash
 mvn clean package
 
 ## 🎯 Uso
+
 Ejecuta el programa con los siguientes parámetros:
 
 bash
 java -jar target/convertMt940ToCsv.jar [PENDIENTES_DIR] [PROCESADOS_DIR] [CSV_DIR] [ERRORES_DIR] [NAME_BANK]
 
-Parámetros:
+## Parámetros:
 
 
 
 ![image](https://github.com/user-attachments/assets/9a299aa4-28c0-429d-b2e9-026a4a60a7eb)
 
-🏗️ Estructura del Proyecto
+## 🏗️ Estructura del Proyecto
 
 
 
