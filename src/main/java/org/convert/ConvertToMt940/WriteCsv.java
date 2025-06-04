@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class WriteCsv {
@@ -71,7 +73,7 @@ public class WriteCsv {
         String saldoInicialStr = "0.00";
         BigDecimal saldoActual = BigDecimal.ZERO;
         String moneda = "XXX";
-        String nameFile = outputPath + generateName();
+        String nameFile = outputPath + generateName(Paths.get(filePath).getFileName().toString());
 
         // Extraer información de cabecera
         for (String line : lines) {
@@ -128,19 +130,30 @@ public class WriteCsv {
                         System.err.println("Error en formato de monto: " + montoStr);
                     }
 
-                    // Escribir en CSV
-                    writer.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%.2f,\"%s\",\"%s\"%n",
-                            formatFecha(fecha),
-                            nameBank,
-                            cuenta,
-                            moneda,
-                            referencia,
-                            codigoTrans,
-                            montoStr,
-                            "D".equals(marcaDC) ? "Debito" : "Credito",
-                            saldoActual.doubleValue(),
-                            detalle,
-                            infoAdicional
+
+
+
+                    System.out.println("Valores a formatear:");
+                    System.out.println("Fecha: " + formatFecha(fecha));
+                    System.out.println("Monto: " + montoStr + " (Tipo: " + montoStr.getClass() + ")");
+                    System.out.println("Saldo: " + saldoActual + " (Tipo: " + saldoActual.getClass() + ")");
+
+                    if (moneda.equals("XXX") || moneda.isEmpty()) {
+                        System.err.println("Advertencia: Moneda no especificada en MT940");
+                        moneda = "ND";
+                    }
+                    writer.write(String.format("%s,%s,%s,%s,%s,%s,%.2f,%s,%.2f,\"%s\",\"%s\"%n",
+                            formatFecha(fecha),                  // Fecha formateada (DD/MM/YYYY)
+                            nameBank,                            // Nombre banco (YOP)
+                            cuenta.trim(),                       // Cuenta (limpia de espacios)
+                            moneda,                              // Moneda (GTQ, USD, etc.)
+                            referencia,                          // Referencia bancaria
+                            codigoTrans,                         // Código transacción (CLR, MSC)
+                            new BigDecimal(montoStr.replace(",", ".")).doubleValue(), // Monto con 2 decimales
+                            "D".equals(marcaDC) ? "Debito" : "Credito", // Tipo transacción
+                            saldoActual.doubleValue(),           // Saldo acumulado
+                            detalle.replace("\"", "'"),          // Detalle (comillas simples)
+                            infoAdicional.replace("\"", "'")     // Info adicional (comillas simples)
                     ));
                 }
                 else if (line.startsWith(":62F:") || line.startsWith(":64:")) {
@@ -181,7 +194,22 @@ public class WriteCsv {
     }
 
     private String extraerMoneda(String lineBalance) {
-        return lineBalance.length() > 13 ? lineBalance.substring(10, 13) : "XXX";
+        if (lineBalance == null || !lineBalance.startsWith(":60F:")) {
+            return "XXX";
+        }
+
+        // Eliminar la etiqueta ":60F:"
+        String contenido = lineBalance.substring(5);
+
+        // Buscar el índice donde comienza la moneda (3 letras mayúsculas)
+        Pattern pattern = Pattern.compile("[A-Z]{3}\\d");
+        Matcher matcher = pattern.matcher(contenido);
+
+        if (matcher.find()) {
+            return contenido.substring(matcher.start(), matcher.start() + 3);
+        }
+
+        return "XXX";
     }
 
     private String extraerFecha(String line61) {
@@ -189,13 +217,18 @@ public class WriteCsv {
     }
 
     private String extraerMarcaDebitoCredito(String line61) {
-        int dcIndex = -1;
-        if (line61.length() > 10) {
-            dcIndex = line61.indexOf('C', 10);
-            if (dcIndex == -1) dcIndex = line61.indexOf('D', 10);
+        if (line61 == null || !line61.startsWith(":61:")) {
+            return "N/A";
         }
-        return (dcIndex != -1 && line61.length() > dcIndex) ?
-                line61.substring(dcIndex, dcIndex + 1) : "N/A";
+
+        // Eliminar ":61:" y espacios iniciales
+        String contenido = line61.substring(4).trim();
+
+        // Buscar la marca C/D después de la fecha (6 o 10 dígitos)
+        Pattern pattern = Pattern.compile("^\\d{6}(\\d{4})?([CD])");
+        Matcher matcher = pattern.matcher(contenido);
+
+        return matcher.find() ? matcher.group(2) : "N/A";
     }
 
     private String extraerMonto(String line61, String marcaDC) {
@@ -285,8 +318,13 @@ public class WriteCsv {
                 fechaAAMMDD.substring(0, 2)); // Año
     }
 
-    private static String generateName() {
-        return LocalDateTime.now().format(
-                DateTimeFormatter.ofPattern("ddMMyyyyHHmmss")) + ".csv";
+    private static String generateName(String inputFilename) {
+        // Eliminar las extensiones .mt940 o .txt si están presentes
+        String filenameWithoutExtension = inputFilename
+                .replace(".mt940", "")
+                .replace(".txt", "");
+
+        return filenameWithoutExtension + "_" +
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("HHmmssSS")) + ".csv";
     }
 }

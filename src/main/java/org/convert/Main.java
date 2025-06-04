@@ -37,6 +37,14 @@ public class Main {
 
         } else {
             System.out.println("Se deben proporcionar al menos 5 parametros");
+
+            //TEST
+
+            PENDIENTES_DIR = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/banco_azul_pendientes/";
+            PROCESADOS_DIR = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/banco_azul_procesado/";
+            CSV_DIR = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/banco_azul_csv/";
+            ERRORES_DIR = "C:/Users/User/Desktop/CURSOS/proyectos_spring/spring_security/Banco_azul/banco_azul_error/";
+            NAME_BANK = "banco industrial de gt";
         }
 
         ProcessFolder processFolder = new ProcessFolder();
